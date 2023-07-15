@@ -79,16 +79,6 @@ const game = (() => {
             }
         })
         // vertical - google how to use map to iterate over columns to check for vertical win
-
-        /*
-        board.forEach(element => {
-            if (element[0] === element[1] && element[1] === element[2]) { 
-                console.log('horizontal win!')
-            }
-            else console.log('nope');
-        })
-    
-        */
     
         // iterate through each row with for loop
         // in each row - take [0] and push into col1 array, repeat 3 times
@@ -102,9 +92,9 @@ const game = (() => {
 
 function verticalWin() {
 
-    let col1 = []
-    let col2 = []
-    let col3 = []
+    const col0 = []
+    const col1 = []
+    const col2 = []
 
     // iterate through array with for loop
     const checkCol = (column, index)  => {
@@ -113,25 +103,32 @@ function verticalWin() {
         }
     }
 
-    checkCol(col1, 0);
-    checkCol(col2, 1);
-    checkCol(col3, 2);
-   
+    checkCol(col0, 0);
+    checkCol(col1, 1);
+    checkCol(col2, 2);
 
     const allEqual = arr => arr.every(val => val === arr[0]);
 
+    const resultCol0 = allEqual(col0);
     const resultCol1 = allEqual(col1);
     const resultCol2 = allEqual(col2);
-    const resultCol3 = allEqual(col3);
-    
-    return { resultCol1, resultCol2, resultCol3 };
 
-    
+    // ensure matching column values are not zero - if true, column matches
+    const checkVal = (column, result) => {
+    if ((result === true) && (column[1]) !== 0) {
+        result = true;
+    } else result = false;
+    return result;
+    }
 
+    const col0Match = checkVal(col0, resultCol0);
+    const col1Match = checkVal(col1, resultCol1);
+    const col2Match = checkVal(col2, resultCol2);
+
+    if ((col0Match || col1Match || col2Match) === true) {
+        console.log('vertical win!');
+    }
+
+    return { col0Match, col1Match, col2Match };
 }
-
-
-
-
-
 
