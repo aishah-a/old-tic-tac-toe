@@ -18,17 +18,19 @@ const game = (() => {
         return { marker };
     }
 
-    playerOne = Player("X");
-    playerTwo = Player("O");
+    const playerOne = Player("X");
+    const playerTwo = Player("O");
 
     const players = [ playerOne, playerTwo]
 
     let activePlayer = players[0];
     showActivePlayer();
 
+
     const switchPlayer = () => {
        activePlayer = activePlayer === players[0] ? players[1] : players[0];
        showActivePlayer();
+       
     }
     
     function showActivePlayer() {
@@ -42,93 +44,88 @@ const game = (() => {
         } else {
             board[row].splice(column, 1, activePlayer.marker);
             console.log(board);
-            switchPlayer();
             checkWinner();
+            switchPlayer();
         }
     }   
 
     // implement winning conditions
-    // check for 3 in a row - change to: if val !== 0, run nested for loop
-    // horizontal - for loop - for each row in board array, if all three vals match
-    // vertical - if array[0][0] === array[1][0] === array[2][0] -> for all three cols
     // diagonal - if array[0][0] === array[1][1] === array[2][2]
 
     function checkWinner() {
         // horizontal
-        /*
-        for (let i = 0; i < board.length; i++) {
-            for (let j = 0; i < board.length; i++) {
-                // do something
-                board[i].forEach(element => {
-                    if (element[0] === element[1] === element[2]) {
-                        // gameEnd = true
-                        console.log('horizontal win!')
-                    }
-                })
-                
-            }}
-                    
-        }
-        */
-        
         board.forEach(element => {
             if ((element[0] === element[1] && element[1] === element[2]) && element[0] !== 0) { 
                 // gameEnd = true - if false, stop game
                 // if element[1] = X > winner is P1, else P2
                 console.log('horizontal win!');
             }
-        })
-        // vertical - google how to use map to iterate over columns to check for vertical win
-    
-        // iterate through each row with for loop
-        // in each row - take [0] and push into col1 array, repeat 3 times
-        // 3 column arrays
-        // if all values match - vertical win
+        });
 
+
+        // diagonal
+
+        if (board[1][1] !== 0) {
+            if ((board[0][0] === board[1][1]) && (board[1][1] === board[2][2])) {
+                console.log('diag2 same');
+            } else if ((board[2][0] === board[1][1]) && (board[1][1] === board[0][2])) {
+                console.log('diag2 same');
+            }
+        }
+
+
+        // vertical
+
+        /*
+        const col0 = []
+        const col1 = []
+        const col2 = []
+
+        // iterate through array with for loop
+        const checkCol = (column, index)  => {
+            for (let i = 0; i < board.length; i++) {
+                column.push(board[i][index]);
+            }
+        }
+
+        checkCol(col0, 0);
+        checkCol(col1, 1);
+        checkCol(col2, 2);
+
+        const allEqual = arr => arr.every(val => val === arr[0]);
+
+        const resultCol0 = allEqual(col0);
+        const resultCol1 = allEqual(col1);
+        const resultCol2 = allEqual(col2);
+
+        // ensure matching column values are not zero - if true, column matches
+        const checkVal = (column, result) => {
+        if ((result === true) && (column[1]) !== 0) {
+            result = true;
+        } else result = false;
+        return result;
+        }
+
+        const col0Match = checkVal(col0, resultCol0);
+        const col1Match = checkVal(col1, resultCol1);
+        const col2Match = checkVal(col2, resultCol2);
+
+        if ((col0Match || col1Match || col2Match) === true) {
+            console.log('vertical win!');
+        }
+
+        return { col0Match, col1Match, col2Match };
+        */
+       // vertical option 2
+        if ((board[0][1] !== 0) && (board[1][1] !== 0) && (board[2][1] !== 0)) {
+            if ((board[0][0] === board[1][0]) && (board[1][0] === board[2][0]) ||
+                (board[0][1] === board[1][1]) && (board[1][1] === board[2][1]) ||
+                (board[0][2] === board[1][2]) && (board[1][2] === board[2][2])) {
+                console.log('vertical win type 2')
+                }
+        }
 
     } return { playMove, checkWinner }
+    
 })();
-
-
-function verticalWin() {
-
-    const col0 = []
-    const col1 = []
-    const col2 = []
-
-    // iterate through array with for loop
-    const checkCol = (column, index)  => {
-        for (let i = 0; i < board.length; i++) {
-            column.push(board[i][index]);
-        }
-    }
-
-    checkCol(col0, 0);
-    checkCol(col1, 1);
-    checkCol(col2, 2);
-
-    const allEqual = arr => arr.every(val => val === arr[0]);
-
-    const resultCol0 = allEqual(col0);
-    const resultCol1 = allEqual(col1);
-    const resultCol2 = allEqual(col2);
-
-    // ensure matching column values are not zero - if true, column matches
-    const checkVal = (column, result) => {
-    if ((result === true) && (column[1]) !== 0) {
-        result = true;
-    } else result = false;
-    return result;
-    }
-
-    const col0Match = checkVal(col0, resultCol0);
-    const col1Match = checkVal(col1, resultCol1);
-    const col2Match = checkVal(col2, resultCol2);
-
-    if ((col0Match || col1Match || col2Match) === true) {
-        console.log('vertical win!');
-    }
-
-    return { col0Match, col1Match, col2Match };
-}
 
