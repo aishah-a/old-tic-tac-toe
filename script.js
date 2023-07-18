@@ -67,7 +67,7 @@ const game = (() => {
 
         if (board[1][1] !== 0) {
             if ((board[0][0] === board[1][1]) && (board[1][1] === board[2][2])) {
-                console.log('diag2 same');
+                console.log('diag1 same');
             } else if ((board[2][0] === board[1][1]) && (board[1][1] === board[0][2])) {
                 console.log('diag2 same');
             }
@@ -75,8 +75,7 @@ const game = (() => {
 
 
         // vertical
-
-        /*
+        
         const col0 = []
         const col1 = []
         const col2 = []
@@ -113,18 +112,8 @@ const game = (() => {
         if ((col0Match || col1Match || col2Match) === true) {
             console.log('vertical win!');
         }
-
         return { col0Match, col1Match, col2Match };
-        */
-       // vertical option 2
-        if ((board[0][1] !== 0) && (board[1][1] !== 0) && (board[2][1] !== 0)) {
-            if ((board[0][0] === board[1][0]) && (board[1][0] === board[2][0]) ||
-                (board[0][1] === board[1][1]) && (board[1][1] === board[2][1]) ||
-                (board[0][2] === board[1][2]) && (board[1][2] === board[2][2])) {
-                console.log('vertical win type 2')
-                }
-        }
-
+    
     } return { playMove, checkWinner }
     
 })();
