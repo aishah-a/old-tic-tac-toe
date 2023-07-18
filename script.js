@@ -53,67 +53,72 @@ const game = (() => {
     // diagonal - if array[0][0] === array[1][1] === array[2][2]
 
     function checkWinner() {
-        // horizontal
-        board.forEach(element => {
-            if ((element[0] === element[1] && element[1] === element[2]) && element[0] !== 0) { 
-                // gameEnd = true - if false, stop game
-                // if element[1] = X > winner is P1, else P2
-                console.log('horizontal win!');
-            }
-        });
-
 
         // diagonal
-
-        if (board[1][1] !== 0) {
-            if ((board[0][0] === board[1][1]) && (board[1][1] === board[2][2])) {
-                console.log('diag1 same');
-            } else if ((board[2][0] === board[1][1]) && (board[1][1] === board[0][2])) {
-                console.log('diag2 same');
+        (() => {
+            if (board[1][1] !== 0) {
+                if ((board[0][0] === board[1][1]) && (board[1][1] === board[2][2])) {
+                    console.log('diag1 same');
+                } else if ((board[2][0] === board[1][1]) && (board[1][1] === board[0][2])) {
+                    console.log('diag2 same');
+                }
             }
-        }
-
+        })();
 
         // vertical
-        
-        const col0 = []
-        const col1 = []
-        const col2 = []
-
-        // iterate through array with for loop
-        const checkCol = (column, index)  => {
-            for (let i = 0; i < board.length; i++) {
-                column.push(board[i][index]);
+        (() => {
+            const col0 = []
+            const col1 = []
+            const col2 = []
+            
+            const checkCol = (column, index)  => {
+                // iterate through array with for loop
+                for (let i = 0; i < board.length; i++) {
+                    column.push(board[i][index]);
+                }
             }
-        }
 
-        checkCol(col0, 0);
-        checkCol(col1, 1);
-        checkCol(col2, 2);
+            checkCol(col0, 0);
+            checkCol(col1, 1);
+            checkCol(col2, 2);
 
-        const allEqual = arr => arr.every(val => val === arr[0]);
+            const allEqual = arr => arr.every(val => val === arr[0]);
 
-        const resultCol0 = allEqual(col0);
-        const resultCol1 = allEqual(col1);
-        const resultCol2 = allEqual(col2);
+            const resultCol0 = allEqual(col0);
+            const resultCol1 = allEqual(col1);
+            const resultCol2 = allEqual(col2);
 
-        // ensure matching column values are not zero - if true, column matches
-        const checkVal = (column, result) => {
-        if ((result === true) && (column[1]) !== 0) {
-            result = true;
-        } else result = false;
-        return result;
-        }
+            // ensure matching column values are not zero - if true, column matches
+            const checkVal = (column, result) => {
+                if ((result === true) && (column[1]) !== 0) {
+                    result = true;
+                } else result = false;
+                return result;
+            }
+        
+            const col0Match = checkVal(col0, resultCol0);
+            const col1Match = checkVal(col1, resultCol1);
+            const col2Match = checkVal(col2, resultCol2);
 
-        const col0Match = checkVal(col0, resultCol0);
-        const col1Match = checkVal(col1, resultCol1);
-        const col2Match = checkVal(col2, resultCol2);
+            if ((col0Match || col1Match || col2Match) === true) {
+                console.log('vertical win!');
+            }
+            return { col0Match, col1Match, col2Match };
+            
+        })();
 
-        if ((col0Match || col1Match || col2Match) === true) {
-            console.log('vertical win!');
-        }
-        return { col0Match, col1Match, col2Match };
-    
+
+        // horizontal
+        (() => {
+            board.forEach(element => {
+                if ((element[0] === element[1] && element[1] === element[2]) && element[0] !== 0) { 
+                    // gameEnd = true - if false, stop game
+                    // if element[1] = X > winner is P1, else P2
+                    console.log('horizontal win!');
+                }
+            });
+          })();
+
     } return { playMove, checkWinner }
     
 })();
