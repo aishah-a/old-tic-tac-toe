@@ -9,6 +9,10 @@ const board = (() => {
 })();
 
 
+let gameWin = false;
+let gameDraw = false;
+let gameEnd = false;
+
 const game = (() => {
 
     console.log(board);
@@ -58,9 +62,12 @@ const game = (() => {
         (() => {
             if (board[1][1] !== 0) {
                 if ((board[0][0] === board[1][1]) && (board[1][1] === board[2][2])) {
-                    console.log('diag1 same');
+                    console.log('diag win');
+                    gameWin = true;
+
                 } else if ((board[2][0] === board[1][1]) && (board[1][1] === board[0][2])) {
-                    console.log('diag2 same');
+                    console.log('diag win');
+                    gameWin = true;
                 }
             }
         })();
@@ -102,6 +109,7 @@ const game = (() => {
 
             if ((col0Match || col1Match || col2Match) === true) {
                 console.log('vertical win!');
+                gameWin = true;
             }
             return { col0Match, col1Match, col2Match };
             
@@ -115,11 +123,53 @@ const game = (() => {
                     // gameEnd = true - if false, stop game
                     // if element[1] = X > winner is P1, else P2
                     console.log('horizontal win!');
+                    gameWin = true;
                 }
             });
-          })();
+        })();
+
+        // draw
+        (() => {
+            for (let i = 0; i < board.length; i++) {
+                for (let j = 0; j < board[i].length; j++) {
+                    if (board[i][j] !== 0 && gameWin === false) {
+                        gameDraw = true;
+                    }
+                }
+            }
+        })();
+
+        if (gameWin === true) {
+            console.log('winner chosen');
+        } else if (gameDraw === true) {
+            console.log('it\'s a tie!')
+        }
 
     } return { playMove, checkWinner }
     
 })();
 
+// add IIFE for if tie/no win
+// if all cells filled with !== 0 and IF win === false -> draw
+
+
+// for each cell -> if !==0, end = false, if cell === 0 AND win== false
+
+// gameEnd var -> end game if true --> function which executes to check game end? before starting new turn
+
+// end game message, ask user to restart ??
+
+
+function test() {
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+            if (board[i][j] !== 0 && gameWin === true) {
+                gameEnd = true;
+            } 
+        }
+    }
+
+    if (gameEnd === true) {
+        console.log('game end!');
+    }
+}
