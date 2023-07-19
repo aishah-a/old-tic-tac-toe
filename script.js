@@ -8,11 +8,6 @@ const board = (() => {
 
 })();
 
-
-let gameWin = false;
-let gameDraw = false;
-let gameEnd = false;
-
 const game = (() => {
 
     console.log(board);
@@ -57,6 +52,10 @@ const game = (() => {
     // diagonal - if array[0][0] === array[1][1] === array[2][2]
 
     function checkWinner() {
+
+        let gameWin = false;
+        let gameDraw = false;
+        // let gameEnd = false;
 
         // diagonal
         (() => {
@@ -129,15 +128,29 @@ const game = (() => {
         })();
 
         // draw
+        /*
         (() => {
             for (let i = 0; i < board.length; i++) {
                 for (let j = 0; j < board[i].length; j++) {
                     if (board[i][j] !== 0 && gameWin === false) {
-                        gameDraw = true;
+                        // 
                     }
                 }
             }
         })();
+        */
+
+        /*
+        function isBigEnough(element, index, array) {
+            return element >= 10;
+          }
+          [12, 5, 8, 130, 44].every(isBigEnough); // false
+          [12, 54, 18, 130, 44].every(isBigEnough); // true
+
+        */
+
+
+
 
         if (gameWin === true) {
             console.log('winner chosen');
@@ -149,11 +162,7 @@ const game = (() => {
     
 })();
 
-// add IIFE for if tie/no win
-// if all cells filled with !== 0 and IF win === false -> draw
 
-
-// for each cell -> if !==0, end = false, if cell === 0 AND win== false
 
 // gameEnd var -> end game if true --> function which executes to check game end? before starting new turn
 
