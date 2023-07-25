@@ -10,6 +10,9 @@ const board = (() => {
 
 })();
 
+let gameWin = false;
+let gameDraw = false;
+
 const game = (() => {
 
     console.log(board);
@@ -44,9 +47,10 @@ const game = (() => {
             console.log('Please choose another spot!')
         } else {
             board[row].splice(column, 1, activePlayer.marker);
-            console.log(board);
             checkWinner();
+            console.log(board);
             switchPlayer();
+            
         }
     }   
 
@@ -55,8 +59,7 @@ const game = (() => {
 
     function checkWinner() {
 
-        let gameWin = false;
-        let gameDraw = false;
+
         // let gameEnd = false;
 
         // diagonal
@@ -116,7 +119,6 @@ const game = (() => {
             
         })();
 
-
         // horizontal
         // change to use 'every'??
         (() => {
@@ -129,8 +131,6 @@ const game = (() => {
                 }
             });
         })();
-
-        
         // use arr.every to get draw
         // use every and nested loops to check if all values in aray elements are !== 0 to see if game draw
 
@@ -138,8 +138,9 @@ const game = (() => {
         // check if board[1] contains any zeros
         // use every() to check that all vals are NOT zero
         // repeat for each array inside board
-
-
+        
+        
+        
 
         // declare winner
         if (gameWin === true) {
@@ -148,44 +149,20 @@ const game = (() => {
             console.log('it\'s a tie!')
         }
 
-    } return { playMove, checkWinner }
+    } 
+    
+    
+    return { playMove, checkWinner }
     
 })();
 
-
-(() => {
-    let checkZeroArr;
-
-    const checkZero = () => {
-        let answer;
-        checkZeroArr = []
-        const checkZeroArr = (arr) => arr !== 0;
-        for (let i = 0; i < board.length; i++) {
-            answer = board[i].every(checkZeroArr);
-            checkZeroArr.push(answer);
-        }
-        return checkZeroArr;
-    }
-
-    const checkTie = () => {
-        const allZero = (arr) => arr === true;
-        let check = checkZeroArr.every(allZero);
-        if (check === true) {
-            if (gameWin === false) {
-                gameDraw = true;
-            }
-        }
-    }
-
-    return { checkZero, checkTie }
-})();
 
 
 // gameEnd var -> end game if true --> function which executes to check game end? before starting new turn
 
 // end game message, ask user to restart ??
 
-
+/*
 function test() {
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[i].length; j++) {
@@ -199,7 +176,7 @@ function test() {
         console.log('game end!');
     }
 }
-
+*/
 
 // iterate through array to make sure all vals are NOT zero
 // if none are zero, check if there's no win - if none => draw
@@ -207,25 +184,81 @@ function test() {
 
 
 // go through each [i] in array
-            // if all vals not 0 in each
-            /*
-                [
-                    [0, 0, 0],
-                    [0, 0, 0],
-                    [0, 0, 0]
-                ]
+    // if all vals not 0 in each
+    /*
+        [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
 
-                [
-                    [X, O, O],
-                    [X, O, X],
-                    [O, X, O]
-                ]
+        [
+            [X, O, O],
+            [X, O, X],
+            [O, X, O]
+        ]
 
-                check if each inner array returns true for NO ZEROS
-                push each value into a new array
-                e.g. [true, true, false]
-                use EVERY on new array
-                if new array returns true for NO ZEROS
-                no zeros = TRUE
-                then check if game win
-            */
+        check if each inner array returns true for NO ZEROS
+        push each value into a new array
+        e.g. [true, true, false]
+        use EVERY on new array
+        if new array returns true for NO ZEROS
+        no zeros = TRUE
+        then check if game win
+    */
+
+function test() {
+    console.log(gameDraw);
+    console.log(gameWin);
+}
+
+
+let zeroArray = [];
+function checkFirst() {
+    // iterate through array to make sure all vals are NOT zero
+    // if none are zero, check if there's no win - if none => draw
+
+    // go through each [i] in array
+    // if all vals not 0 in each
+    /*
+        [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+
+        [
+            [X, O, O],
+            [X, O, X],
+            [O, X, O]
+        ]
+
+        check if each inner array returns true for NO ZEROS
+        push each value into a new array
+        e.g. [true, true, false]
+        use EVERY on new array
+        if new array returns true for NO ZEROS
+        no zeros = TRUE
+        then check if game win
+    */
+
+    const checkZeroArray = (arr) => arr !== 0;
+    let answer;
+    zeroArray = [];
+        for (let i = 0; i < board.length; i++) {
+            answer = board[i].every(checkZeroArray);
+            zeroArray.push(answer);
+        } return zeroArray;
+}
+
+
+function checkSecond() {
+    const allZero = (arr) => arr === true;
+    let check = zeroArray.every(allZero);
+    if (check === true) {
+        if (gameWin === false) {
+            gameDraw = true;
+            console.log('draw!')
+        }
+    } else console.log('nah');
+}
