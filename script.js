@@ -201,3 +201,71 @@ function test() {
     console.log(gameDraw);
     console.log(gameWin);
 }
+
+// TO DO
+// gameEnd + reset defaults function to start new game
+// change win types to factory functions????
+// add dom
+// remove console logs
+// each player should have the ability to play a move - factory 
+
+
+
+// LOGIC FOR UI VER
+
+// initialize gameboard
+
+const cell00 = document.querySelector(".c00");
+const cell01 = document.querySelector(".c01");
+const cell02 = document.querySelector(".c02");
+const cell10 = document.querySelector(".c10");
+const cell11 = document.querySelector(".c11");
+const cell12 = document.querySelector(".c12");
+const cell20 = document.querySelector(".c20");
+const cell21 = document.querySelector(".c21");
+const cell22 = document.querySelector(".c22");
+
+
+const gameBoard = (() => {
+    return [
+    [cell00, cell01, cell02],
+    [cell10, cell11, cell12],
+    [cell20, cell21, cell22]
+]
+})();
+
+
+// SET ACTIVE PLAYER
+// IF CELL CLICKED, PLACE ACTIVE PLAYER MARKER
+
+const Player = (marker) => {
+    const playAMove = (cell) => {
+    // play move function
+        cell.innerText = `${activePlayer.marker}`;
+        console.log(activePlayer);
+        console.log('played a move');
+        switchPlayer();
+    };
+    return {marker, playAMove};
+};
+
+const playerOne = Player("X");
+const playerTwo = Player("O");
+// playerOne.playAMove(cell10)
+
+const players = [ playerOne, playerTwo ];
+
+let activePlayer = players[0];
+const switchPlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+ }
+
+
+
+const cellList = document.querySelectorAll(".cell");
+
+cellList.forEach((cell) => {
+    cell.addEventListener("click", () => {
+        activePlayer.playAMove(cell);
+    })
+})
