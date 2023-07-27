@@ -214,37 +214,57 @@ function test() {
 // LOGIC FOR UI VER
 
 // initialize gameboard
+// const cellList = document.querySelectorAll(".cell");
 
-const cell00 = document.querySelector(".c00");
-const cell01 = document.querySelector(".c01");
-const cell02 = document.querySelector(".c02");
-const cell10 = document.querySelector(".c10");
-const cell11 = document.querySelector(".c11");
-const cell12 = document.querySelector(".c12");
-const cell20 = document.querySelector(".c20");
-const cell21 = document.querySelector(".c21");
-const cell22 = document.querySelector(".c22");
+const container = document.querySelector(".cell_container")
 
 
-const gameBoard = (() => {
-    return [
-    [cell00, cell01, cell02],
-    [cell10, cell11, cell12],
-    [cell20, cell21, cell22]
-]
-})();
+const BoardCell = (value, empty) => {
+    value,
+    empty = true;
+    return { value, empty }
+};
+
+const cellArray = []
+
+// create board
+for (let i = 0; i < 9; i++) {
+    let cell = BoardCell(i, true);
+    cellArray.push(cell);
+}
+
+for (let i = 0; i < cellArray.length; i++) {
+    const divCell = document.createElement("div");
+    divCell.setAttribute("class", "cell");
+    divCell.setAttribute("id", cellArray[i].value);
+    container.appendChild(divCell);
+}
+
+const cellList = document.querySelectorAll(".cell");
+
+cellList.forEach((cell) => {
+    cell.addEventListener("click", () => {
+        activePlayer.playAMove(cell);
+    })
+})
 
 
 // SET ACTIVE PLAYER
 // IF CELL CLICKED, PLACE ACTIVE PLAYER MARKER
 
 const Player = (marker) => {
+    // const active = false;
+    // add back in to show "it's Player XYZ turn"
     const playAMove = (cell) => {
     // play move function
-        cell.innerText = `${activePlayer.marker}`;
-        console.log(activePlayer);
-        console.log('played a move');
-        switchPlayer();
+        // change cell status to "filled"
+        if (cellArray[cell.id].empty === true) {
+            cell.innerText = `${activePlayer.marker}`;
+            console.log(activePlayer.marker);
+            cellArray[cell.id].empty = false;
+            switchPlayer();
+        } else alert('Please choose another spot!');
+            
     };
     return {marker, playAMove};
 };
@@ -254,18 +274,93 @@ const playerTwo = Player("O");
 // playerOne.playAMove(cell10)
 
 const players = [ playerOne, playerTwo ];
-
 let activePlayer = players[0];
+
+
 const switchPlayer = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
- }
+}
 
 
 
-const cellList = document.querySelectorAll(".cell");
+
+
+/*
+const createBoard = (() => {
+
+    const gameBoard = () => {
+        
+    }
+    
+    
+
+    let cell00 = document.querySelector(".c00");
+    let cell01 = document.querySelector(".c01");
+    let cell02 = document.querySelector(".c02");
+    let cell10 = document.querySelector(".c10");
+    let cell11 = document.querySelector(".c11");
+    let cell12 = document.querySelector(".c12");
+    let cell20 = document.querySelector(".c20");
+    let cell21 = document.querySelector(".c21");
+    let cell22 = document.querySelector(".c22");
+    
+    
+    for (let i = 0; i < cellList.length; i++) {
+        cellList[i].value = cellList[i].dataset.val;
+        cellList[i].empty = true;
+        console.log(cellList[i].value);
+    }
+
+    const gameBoard = [
+        [cell00, cell01, cell02],
+        [cell10, cell11, cell12],
+        [cell20, cell21, cell22]
+    ];
+    */
+
+
+
+// SET ACTIVE PLAYER
+// IF CELL CLICKED, PLACE ACTIVE PLAYER MARKER
+/*
+const Player = (marker, active) => {
+    // const active = false;
+    // add back in to show "it's Player XYZ turn"
+    const playAMove = (cell) => {
+    // play move function
+        // change cell status to "filled"
+        if (cell.empty === true) {
+            cell.innerText = `${activePlayer.marker}`;
+            console.log(activePlayer);
+            console.log('played a move');
+            cell.empty = false;
+            switchPlayer();
+        } else alert("Please choose another spot!");
+    };
+    return {marker, playAMove};
+};
+
+const playerOne = Player("X");
+const playerTwo = Player("O");
+// playerOne.playAMove(cell10)
+
+const players = [ playerOne, playerTwo ];
+let activePlayer = players[0];
+
+const gamePlay = (() => {
+    const switchPlayer = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    }
+ return { switchPlayer }
+})();
+
+
+
+
 
 cellList.forEach((cell) => {
     cell.addEventListener("click", () => {
         activePlayer.playAMove(cell);
     })
 })
+*/
