@@ -423,13 +423,27 @@ const game = (() => {
             }
  
         })();
-        // use arr.every to get draw
-        // use every and nested loops to check if all values in aray elements are !== 0 to see if game draw
 
-        // if all arrays contain NOT zero 
-        // check if gameBoard[1] contains any zeros
-        // use every() to check that all vals are NOT zero
-        // repeat for each array inside gameBoard
+        // check if all the cells.empty === FALSE
+        // if all cells are NOT empty and gameWin === false
+        // use nested loop to get every cell
+
+        const checkMarked = arr => arr.every((obj) => {
+            return obj.empty === false;
+        })
+
+        for (let i = 0; i < 3; i++) {
+            let result = checkMarked(gameBoard[i]);
+            console.log(result)
+        }
+
+        // push result into a result array
+        // e.g. [true, false, true]
+        // if ALL vals in result array = true, means all cells.empty === FALSE
+        // then check if gameWin === false
+        // gameDraw === true
+
+
         /*
         
         // tie 
