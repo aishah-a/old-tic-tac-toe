@@ -206,11 +206,9 @@ function test() {
 }
 
 // TO DO
-// gameEnd + reset defaults function to start new game
+// gameEnd + reset defaults function to start new game OR just add button to reload page
 // change win types to factory functions????
 // remove console logs
-// use map to create new gameBoard array - nested - to check for wins
-
 
 
 // LOGIC FOR UI VER
@@ -424,53 +422,46 @@ const game = (() => {
  
         })();
 
+
+        // tie 
+
         // check if all the cells.empty === FALSE
+        // push 'check every is marked' result to array
+        // if each inner array is marked
         // if all cells are NOT empty and gameWin === false
-        // use nested loop to get every cell
 
         const checkMarked = arr => arr.every((obj) => {
             return obj.empty === false;
         })
 
+        let results = []
         for (let i = 0; i < 3; i++) {
             let result = checkMarked(gameBoard[i]);
-            console.log(result)
+            results.push(result);
         }
 
-        // push result into a result array
-        // e.g. [true, false, true]
-        // if ALL vals in result array = true, means all cells.empty === FALSE
-        // then check if gameWin === false
-        // gameDraw === true
+        const checkTrue = arr => arr.every((val) => {
+            return val === true;
+        })
 
-
-        /*
-        
-        // tie 
-        let zeroArray = [];
-        (() => {
-            const checkZeroArray = (arr) => arr !== 0;
-            let answer;
-            zeroArray = [];
-                for (let i = 0; i < gameBoard.length; i++) {
-                    answer = gameBoard[i].every(checkZeroArray);
-                    zeroArray.push(answer);
-                } return zeroArray;
-        })();
-        
-        (() => {
-            const allZero = (arr) => arr === true;
-            let check = zeroArray.every(allZero);
-            if (check === true) {
+        if (results.length === 3) {
+            let answer = checkTrue(results);
+            if (answer === true) {
                 if (gameWin === false) {
                     gameDraw = true;
-                    console.log('draw!')
                 }
-            } else console.log('nah');
-        })();
-        */
+            }
+        }
 
         // declare winner
+
+        /* 
+        if marker = X -> P1 is winner
+        if marker = O -> P2 is winner
+
+        
+        */
+
         if (gameWin === true) {
             console.log('winner chosen');
             gameEnd = true;
@@ -485,12 +476,16 @@ const game = (() => {
         }
 
     }
+
     if (gameEnd === true) {
+       alert('game over!');
+        /*
         gameBoard = [
             [0, 0, 0],
             [0, 0, 0],
             [0, 0, 0]
         ]
+        */
 
     }
     return { checkWinner }
