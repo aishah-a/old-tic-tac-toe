@@ -421,7 +421,7 @@ const game = (() => {
                     gameWin = true;
                 }
             }
-
+ 
         })();
         // use arr.every to get draw
         // use every and nested loops to check if all values in aray elements are !== 0 to see if game draw
