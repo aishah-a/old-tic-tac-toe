@@ -1,5 +1,7 @@
 "use strict"
 
+// CONSOLE VER
+/*
 const board = (() => {
     // OR return new Array(3).fill(0).map(() => new Array(3).fill(0));
     return [
@@ -9,6 +11,7 @@ const board = (() => {
     ]
 
 })();
+
 
 const game = (() => {
 
@@ -188,7 +191,7 @@ const game = (() => {
     return { playMove, checkWinner }
 })();
 
-
+*/
 
 // gameEnd var -> end game if true --> function which executes to check game end? before starting new turn
 
@@ -205,9 +208,8 @@ function test() {
 // TO DO
 // gameEnd + reset defaults function to start new game
 // change win types to factory functions????
-// add dom
 // remove console logs
-// each player should have the ability to play a move - factory 
+// use map to create new gameBoard array - nested - to check for wins
 
 
 
@@ -216,151 +218,266 @@ function test() {
 // initialize gameboard
 // const cellList = document.querySelectorAll(".cell");
 
-const container = document.querySelector(".cell_container")
+const container = document.querySelector(".cell_container");
+const cellArray = [];
+let gameBoard = [ [], [], []];
 
-
-const BoardCell = (value, empty) => {
+const BoardCell = (value, marked, empty) => {
     value,
+    marked,
     empty = true;
     return { value, empty }
 };
 
-const cellArray = []
-
 // create board
-for (let i = 0; i < 9; i++) {
-    let cell = BoardCell(i, true);
-    cellArray.push(cell);
-}
-
-for (let i = 0; i < cellArray.length; i++) {
-    const divCell = document.createElement("div");
-    divCell.setAttribute("class", "cell");
-    divCell.setAttribute("id", cellArray[i].value);
-    container.appendChild(divCell);
-}
-
-const cellList = document.querySelectorAll(".cell");
-
-cellList.forEach((cell) => {
-    cell.addEventListener("click", () => {
-        activePlayer.playAMove(cell);
-    })
-})
-
-
-// SET ACTIVE PLAYER
-// IF CELL CLICKED, PLACE ACTIVE PLAYER MARKER
-
-const Player = (marker) => {
-    // const active = false;
-    // add back in to show "it's Player XYZ turn"
-    const playAMove = (cell) => {
-    // play move function
-        // change cell status to "filled"
-        if (cellArray[cell.id].empty === true) {
-            cell.innerText = `${activePlayer.marker}`;
-            console.log(activePlayer.marker);
-            cellArray[cell.id].empty = false;
-            switchPlayer();
-        } else alert('Please choose another spot!');
-            
-    };
-    return {marker, playAMove};
-};
-
-const playerOne = Player("X");
-const playerTwo = Player("O");
-// playerOne.playAMove(cell10)
-
-const players = [ playerOne, playerTwo ];
-let activePlayer = players[0];
-
-
-const switchPlayer = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
-}
-
-
-
-
-
-/*
-const createBoard = (() => {
-
-    const gameBoard = () => {
-        
-    }
-    
-    
-
-    let cell00 = document.querySelector(".c00");
-    let cell01 = document.querySelector(".c01");
-    let cell02 = document.querySelector(".c02");
-    let cell10 = document.querySelector(".c10");
-    let cell11 = document.querySelector(".c11");
-    let cell12 = document.querySelector(".c12");
-    let cell20 = document.querySelector(".c20");
-    let cell21 = document.querySelector(".c21");
-    let cell22 = document.querySelector(".c22");
-    
-    
-    for (let i = 0; i < cellList.length; i++) {
-        cellList[i].value = cellList[i].dataset.val;
-        cellList[i].empty = true;
-        console.log(cellList[i].value);
+const initBoard = (() => {
+    // create array list of cell objects - see if can be merged with gameboard
+    for (let i = 0; i < 9; i++) {
+        let cell = BoardCell(i, true);
+        cellArray.push(cell);
+        const divCell = document.createElement("div");
+        divCell.setAttribute("class", "cell");
+        divCell.setAttribute("id", cellArray[i].value);
+        container.appendChild(divCell);
     }
 
-    const gameBoard = [
-        [cell00, cell01, cell02],
-        [cell10, cell11, cell12],
-        [cell20, cell21, cell22]
-    ];
-    */
-
-
-
-// SET ACTIVE PLAYER
-// IF CELL CLICKED, PLACE ACTIVE PLAYER MARKER
-/*
-const Player = (marker, active) => {
-    // const active = false;
-    // add back in to show "it's Player XYZ turn"
-    const playAMove = (cell) => {
-    // play move function
-        // change cell status to "filled"
-        if (cell.empty === true) {
-            cell.innerText = `${activePlayer.marker}`;
-            console.log(activePlayer);
-            console.log('played a move');
-            cell.empty = false;
-            switchPlayer();
-        } else alert("Please choose another spot!");
-    };
-    return {marker, playAMove};
-};
-
-const playerOne = Player("X");
-const playerTwo = Player("O");
-// playerOne.playAMove(cell10)
-
-const players = [ playerOne, playerTwo ];
-let activePlayer = players[0];
-
-const gamePlay = (() => {
-    const switchPlayer = () => {
-        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    // add to board array  so can check wins
+    function addToBoard(index, num) {
+        gameBoard[index].push(cellArray[num])
     }
- return { switchPlayer }
+
+    // see if way to increment index in add to board and reduce number of functions
+    for (let i = 0; i < 3; i++) {
+        // for (let j = 0; j < i; j++){
+        addToBoard(0, i)
+        console.log(i);
+    }
+
+    for (let i = 3; i < 6; i++) {
+        // for (let j = 0; j < i; j++){
+        addToBoard(1, i)
+        console.log(i);
+    }
+
+    for (let i = 6; i < 9; i++) {
+        // for (let j = 0; j < i; j++){
+        addToBoard(2, i)
+        console.log(i);
+    }
+
 })();
 
+const gamePlay = (() => {
+    
+    const Player = (marker) => {
+        // const active = false;
+        // add back in to show "it's Player XYZ turn"
+        const playAMove = (cell) => {
+        // play move function
+            // change cell status to "filled"
+            if (cellArray[cell.id].empty === true) {
+                cell.innerText = `${activePlayer.marker}`;
+                // delete console log later
+                console.log(activePlayer.marker);
 
+                cellArray[cell.id].empty = false;
+                cellArray[cell.id].marked = activePlayer.marker;
+                game.checkWinner();
+                switchPlayer();
+            } else alert('Please choose another spot!');
+                
+        };
+        return {marker, playAMove};
+    };
 
+    const playerOne = Player("X");
+    const playerTwo = Player("O");
+    const players = [ playerOne, playerTwo ];
 
+    let activePlayer = players[0];
 
-cellList.forEach((cell) => {
+    const switchPlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    }
+
+    const cellList = document.querySelectorAll(".cell");
+
+    cellList.forEach((cell) => {
     cell.addEventListener("click", () => {
         activePlayer.playAMove(cell);
     })
-})
+    })
+   
+    return { playerOne, playerTwo, switchPlayer }
+})();
+
+// winning logic
+
+/* push all cellArray vals to a new, nested array
+
+checkWin = [
+    [0, 1, 2]
+    [3, 4, 5]
+    [6, 7, 8]
+
+]
+
 */
+
+const game = (() => {
+
+    let gameEnd = false;
+    console.log(gameBoard);
+
+    // winning conditions
+
+    function checkWinner() {
+
+        let gameWin = false;
+        let gameDraw = false;
+
+        // diagonal
+        (() => {
+            if (gameBoard[1][1].empty === false) {
+                if ((gameBoard[0][0].marked === gameBoard[1][1].marked) && (gameBoard[1][1].marked === gameBoard[2][2].marked)) {
+                    console.log('diag win');
+                    gameWin = true;
+                } else if ((gameBoard[2][0].marked === gameBoard[1][1].marked) && (gameBoard[1][1].marked === gameBoard[0][2].marked)) {
+                    console.log('diag win');
+                    gameWin = true;
+                }
+            }
+        })();
+
+
+        // vertical
+        (() => {
+
+            const col0 = []
+            const col1 = []
+            const col2 = []
+            
+            let cols = [col0, col1, col2];
+
+            // create array for each gameboard column and push into array
+            const createCol = (column, index)  => {
+                // iterate through array with for loop
+                for (let i = 0; i < gameBoard.length; i++) {
+                    column.push(gameBoard[i][index]);
+                }
+            }
+
+            // call function to push each column to col array
+            for (let i = 0; i < 3; i++) {
+                createCol(cols[i], [i]);
+            }
+
+            // check if MARKED for all column array vals are the same
+            const crossWin = arr => arr.every((obj) => {
+                return obj.marked === 'X';
+            })
+            
+            const noughtWin = arr => arr.every((obj) => {
+                return obj.marked === 'O';
+            })
+
+            for (let i = 0; i < cols.length; i++) {
+                let result = crossWin(cols[i]);
+                if (result === true) {
+                    gameWin = true;
+                }
+            }
+
+            for (let i = 0; i < cols.length; i++) {
+                let result = noughtWin(cols[i]);
+                if (result === true) {
+                    gameWin = true;
+                }
+            }
+        })();
+        
+        // horizontal
+
+        // create a global(?) or game object-level factory function for the crossWin and noughtWin function as it keeps being reused
+        (() => {
+            const crossWin = arr => arr.every((obj) => {
+                return obj.marked === 'X';
+            })
+
+            const noughtWin = arr => arr.every((obj) => {
+                return obj.marked === 'O';
+            })
+
+            for (let i = 0; i < gameBoard.length; i++) {
+                let result = crossWin(gameBoard[i]);
+                if (result === true) {
+                    gameWin = true;
+                }
+            }
+
+            for (let i = 0; i < gameBoard.length; i++) {
+                let result = noughtWin(gameBoard[i]);
+                if (result === true) {
+                    gameWin = true;
+                }
+            }
+
+        })();
+        // use arr.every to get draw
+        // use every and nested loops to check if all values in aray elements are !== 0 to see if game draw
+
+        // if all arrays contain NOT zero 
+        // check if gameBoard[1] contains any zeros
+        // use every() to check that all vals are NOT zero
+        // repeat for each array inside gameBoard
+        /*
+        
+        // tie 
+        let zeroArray = [];
+        (() => {
+            const checkZeroArray = (arr) => arr !== 0;
+            let answer;
+            zeroArray = [];
+                for (let i = 0; i < gameBoard.length; i++) {
+                    answer = gameBoard[i].every(checkZeroArray);
+                    zeroArray.push(answer);
+                } return zeroArray;
+        })();
+        
+        (() => {
+            const allZero = (arr) => arr === true;
+            let check = zeroArray.every(allZero);
+            if (check === true) {
+                if (gameWin === false) {
+                    gameDraw = true;
+                    console.log('draw!')
+                }
+            } else console.log('nah');
+        })();
+        */
+
+        // declare winner
+        if (gameWin === true) {
+            console.log('winner chosen');
+            gameEnd = true;
+        } else if (gameDraw === true) {
+            console.log('it\'s a tie!');
+            gameEnd = true;
+        }
+
+        if (gameEnd === true) {
+            console.log('game over!');
+            // create setDefault func and run here?
+        }
+
+    }
+    if (gameEnd === true) {
+        gameBoard = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]
+
+    }
+    return { checkWinner }
+})();
