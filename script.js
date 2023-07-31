@@ -200,10 +200,6 @@ const game = (() => {
 // iterate through array to make sure all vals are NOT zero
 // if none are zero, check if there's no win - if none => draw
 
-function test() {
-    console.log(gameDraw);
-    console.log(gameWin);
-}
 
 // TO DO
 // gameEnd + reset defaults function to start new game OR just add button to reload page
@@ -311,16 +307,6 @@ const gamePlay = (() => {
 
 // winning logic
 
-/* push all cellArray vals to a new, nested array
-
-checkWin = [
-    [0, 1, 2]
-    [3, 4, 5]
-    [6, 7, 8]
-
-]
-
-*/
 
 const game = (() => {
 
@@ -333,6 +319,16 @@ const game = (() => {
 
         let gameWin = false;
         let gameDraw = false;
+
+        const checkWin = (arr) => {
+            const crossWin = arr => arr.every((obj) => {
+                return obj.marked === 'X';
+            });
+            const noughtWin = arr => arr.every((obj) => {
+                return obj.marked === 'O';
+            });
+            return { crossWin, noughtWin }
+        }
 
         // diagonal
         (() => {
@@ -370,55 +366,53 @@ const game = (() => {
                 createCol(cols[i], [i]);
             }
 
+
             // check if MARKED for all column array vals are the same
-            const crossWin = arr => arr.every((obj) => {
-                return obj.marked === 'X';
-            })
-            
-            const noughtWin = arr => arr.every((obj) => {
-                return obj.marked === 'O';
-            })
 
-            for (let i = 0; i < cols.length; i++) {
-                let result = crossWin(cols[i]);
+            // maybe FOR loops change to a function which takes the array as input (i.e. cols) and all the rest is the same 
+            for (let i = 0; i < gameBoard.length; i++) {
+                // instantiate new obj from factory func
+                let result = checkWin(cols[i]); 
+                result = result.crossWin(cols[i])
                 if (result === true) {
                     gameWin = true;
                 }
-            }
-
-            for (let i = 0; i < cols.length; i++) {
-                let result = noughtWin(cols[i]);
+            }   
+    
+            for (let i = 0; i < gameBoard.length; i++) {
+                // instantiate new obj from factory func
+                let result = checkWin(cols[i]); 
+                result = result.noughtWin(cols[i])
                 if (result === true) {
                     gameWin = true;
                 }
-            }
+            }   
+    
         })();
-        
+
+
         // horizontal
 
         // create a global(?) or game object-level factory function for the crossWin and noughtWin function as it keeps being reused
         (() => {
-            const crossWin = arr => arr.every((obj) => {
-                return obj.marked === 'X';
-            })
-
-            const noughtWin = arr => arr.every((obj) => {
-                return obj.marked === 'O';
-            })
 
             for (let i = 0; i < gameBoard.length; i++) {
-                let result = crossWin(gameBoard[i]);
+                // instantiate new obj from factory func
+                let result = checkWin(gameBoard[i]); 
+                result = result.crossWin(gameBoard[i])
                 if (result === true) {
                     gameWin = true;
                 }
-            }
-
+            }   
+        
             for (let i = 0; i < gameBoard.length; i++) {
-                let result = noughtWin(gameBoard[i]);
+                // instantiate new obj from factory func
+                let result = checkWin(gameBoard[i]); 
+                result = result.noughtWin(gameBoard[i])
                 if (result === true) {
                     gameWin = true;
                 }
-            }
+            }   
  
         })();
 
@@ -459,7 +453,7 @@ const game = (() => {
         if marker = X -> P1 is winner
         if marker = O -> P2 is winner
 
-        
+
         */
 
         if (gameWin === true) {
@@ -475,18 +469,10 @@ const game = (() => {
             // create setDefault func and run here?
         }
 
+        if (gameEnd === true) {
+            console.log('done!');
+        }
     }
 
-    if (gameEnd === true) {
-       alert('game over!');
-        /*
-        gameBoard = [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0]
-        ]
-        */
-
-    }
     return { checkWinner }
 })();
