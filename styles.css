@@ -51,10 +51,19 @@ div.cell_container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    padding: 5px;
 }
 
 .cell {
-    color: white;
-    padding: 2px;
+    color: var(--lightPink);
+    border: 1px solid var(--lightPink);
+    padding: 8px;
+    margin: 0;
+    font-family: var(--textFont);
+    font-size: 5rem;
+    text-align: center;
 }
+
+.cell:hover {
+    background-color: var(--darkPurple);
+}
+/* add :active to cell to make cell flash white on click w/ transition property */
