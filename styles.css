@@ -42,15 +42,17 @@ div#board {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 div.cell_container {
     border: 2px solid white;
-    width: 454px;
-    height: 454px;
+    width: 425px;
+    height: 425px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
+    margin: 10px;
 }
 
 .cell {
@@ -67,3 +69,13 @@ div.cell_container {
     background-color: var(--darkPurple);
 }
 /* add :active to cell to make cell flash white on click w/ transition property */
+
+div#prompt {
+    flex: 0.5;
+    color: white;
+    font-family: var(--textFont);
+    font-size: 2rem;
+    font-weight: 800;
+    padding: 10px;
+    margin: 5px;
+}
