@@ -224,7 +224,13 @@ const BoardCell = (value, marked, empty) => {
 };
 
 // create board
-const initBoard = (() => {
+const showPage = (() => {
+
+    const text = document.createElement('div');
+    text.setAttribute("id", "prompt");
+    text.innerText = 'Player One, please place your marker';
+    board.insertBefore(text, container)
+    
     // create array list of cell objects - see if can be merged with gameboard
     for (let i = 0; i < 9; i++) {
         let cell = BoardCell(i, true);
@@ -234,13 +240,14 @@ const initBoard = (() => {
         divCell.setAttribute("id", cellArray[i].value);
         container.appendChild(divCell);
     }
+    console.log(cellArray);
 
     // add to board array  so can check wins
     function addToBoard(index, num) {
         gameBoard[index].push(cellArray[num])
     }
 
-    // see if way to increment index in add to board and reduce number of functions
+    // see if way to increment index in add to board and reduce number of loops
     for (let i = 0; i < 3; i++) {
         // for (let j = 0; j < i; j++){
         addToBoard(0, i)
@@ -259,10 +266,17 @@ const initBoard = (() => {
         console.log(i);
     }
 
+    
+
 })();
 
-const gamePlay = (() => {
-    
+
+
+/*
+const createElements = (() => {
+    // put player factory back in here?
+
+    /*
     const Player = (marker) => {
         // const active = false;
         // add back in to show "it's Player XYZ turn"
@@ -281,46 +295,77 @@ const gamePlay = (() => {
             } else alert('Please choose another spot!');
                 
         };
-        return {marker, playAMove};
+        return { marker, playAMove };
     };
+    */
+   /*
 
-    const playerOne = Player("X");
-    const playerTwo = Player("O");
-    const players = [ playerOne, playerTwo ];
+    // const playerOne = Player("X");
+    // const playerTwo = Player("O");
+    // const players = [ playerOne, playerTwo ];
 
-    let activePlayer = players[0];
-
-    const switchPlayer = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
-    }
-
-    const cellList = document.querySelectorAll(".cell");
-
-    cellList.forEach((cell) => {
-    cell.addEventListener("click", () => {
-        activePlayer.playAMove(cell);
-    })
-    })
-   
     return { playerOne, playerTwo, switchPlayer }
+
 })();
 
-// winning logic
+*/
 
+const Player = (playerName, marker) => {
+    playerName
+    // add back in to show "it's Player XYZ turn"
+        const playAMove = (cell) => {
+            // play move function
+            // change cell status to "filled"
+            if (cellArray[cell.id].empty === true) {
+                cell.innerText = `${activePlayer.marker}`;
+                // delete console log later
+                console.log(activePlayer.marker);
+
+                cellArray[cell.id].empty = false;
+                cellArray[cell.id].marked = activePlayer.marker;
+                game.checkWinner();
+                game.switchPlayer();
+            } else alert('Please choose another spot!');     
+        }; 
+    return { playerName, marker, playAMove };
+}
+
+const createElements = (() => {
+
+    const cellList = document.querySelectorAll(".cell");
+   
+    
+    cellList.forEach((cell) => {
+        cell.addEventListener("click", () => {
+            activePlayer.playAMove(cell);
+        })
+    })
+
+    return { cellList }
+})();
+
+const playerOne = Player('Player One', 'X');
+const playerTwo = Player('Player Two', 'O');
+const players = [ playerOne, playerTwo ];
+let activePlayer = players[0];
 
 const game = (() => {
 
+    let winner;
     let gameEnd = false;
-    console.log(gameBoard);
+
+
+    function switchPlayer() {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    }
 
     // winning conditions
-
     function checkWinner() {
 
         let gameWin = false;
         let gameDraw = false;
 
-        const checkWin = (arr) => {
+        const CheckWin = (arr) => {
             const crossWin = arr => arr.every((obj) => {
                 return obj.marked === 'X';
             });
@@ -330,11 +375,32 @@ const game = (() => {
             return { crossWin, noughtWin }
         }
 
+        function noughtWinLoop(arr) {
+            for (let i = 0; i < gameBoard.length; i++) {
+                let result = CheckWin(arr[i]);
+                result = result.crossWin(arr[i])
+                if (result === true) {
+                    gameWin = true;
+                }
+            }
+        }
+
+        function crossWinLoop(arr) {
+            for (let i = 0; i < gameBoard.length; i++) {
+                let result = CheckWin(arr[i]);
+                result = result.noughtWin(arr[i])
+                if (result === true) {
+                    gameWin = true;
+                }
+            }
+        }
+
         // diagonal
         (() => {
             if (gameBoard[1][1].empty === false) {
                 if ((gameBoard[0][0].marked === gameBoard[1][1].marked) && (gameBoard[1][1].marked === gameBoard[2][2].marked)) {
                     console.log('diag win');
+                    console.log(gameBoard);
                     gameWin = true;
                 } else if ((gameBoard[2][0].marked === gameBoard[1][1].marked) && (gameBoard[1][1].marked === gameBoard[0][2].marked)) {
                     console.log('diag win');
@@ -365,65 +431,23 @@ const game = (() => {
             for (let i = 0; i < 3; i++) {
                 createCol(cols[i], [i]);
             }
-
-
-            // check if MARKED for all column array vals are the same
-
-            // maybe FOR loops change to a function which takes the array as input (i.e. cols) and all the rest is the same 
-            for (let i = 0; i < gameBoard.length; i++) {
-                // instantiate new obj from factory func
-                let result = checkWin(cols[i]); 
-                result = result.crossWin(cols[i])
-                if (result === true) {
-                    gameWin = true;
-                }
-            }   
-    
-            for (let i = 0; i < gameBoard.length; i++) {
-                // instantiate new obj from factory func
-                let result = checkWin(cols[i]); 
-                result = result.noughtWin(cols[i])
-                if (result === true) {
-                    gameWin = true;
-                }
-            }   
+            
+            crossWinLoop(cols);
+            noughtWinLoop(cols);
     
         })();
 
-
+        
         // horizontal
-
-        // create a global(?) or game object-level factory function for the crossWin and noughtWin function as it keeps being reused
         (() => {
 
-            for (let i = 0; i < gameBoard.length; i++) {
-                // instantiate new obj from factory func
-                let result = checkWin(gameBoard[i]); 
-                result = result.crossWin(gameBoard[i])
-                if (result === true) {
-                    gameWin = true;
-                }
-            }   
-        
-            for (let i = 0; i < gameBoard.length; i++) {
-                // instantiate new obj from factory func
-                let result = checkWin(gameBoard[i]); 
-                result = result.noughtWin(gameBoard[i])
-                if (result === true) {
-                    gameWin = true;
-                }
-            }   
- 
+            crossWinLoop(gameBoard);
+            noughtWinLoop(gameBoard);
+
         })();
 
 
         // tie 
-
-        // check if all the cells.empty === FALSE
-        // push 'check every is marked' result to array
-        // if each inner array is marked
-        // if all cells are NOT empty and gameWin === false
-
         const checkMarked = arr => arr.every((obj) => {
             return obj.empty === false;
         })
@@ -453,11 +477,16 @@ const game = (() => {
         if marker = X -> P1 is winner
         if marker = O -> P2 is winner
 
-
         */
+
+        const declareWinner = () => {
+            activePlayer.marker === 'X' ? winner = playerOne : winner = playerTwo;
+            console.log('The winner is: ' + winner.playerName);
+        }
 
         if (gameWin === true) {
             console.log('winner chosen');
+            declareWinner();
             gameEnd = true;
         } else if (gameDraw === true) {
             console.log('it\'s a tie!');
@@ -465,14 +494,18 @@ const game = (() => {
         }
 
         if (gameEnd === true) {
-            console.log('game over!');
-            // create setDefault func and run here?
-        }
-
-        if (gameEnd === true) {
             console.log('done!');
         }
     }
-
-    return { checkWinner }
+    return { checkWinner, switchPlayer }
 })();
+
+
+function endGame() {
+    
+    // can't remove event listeners on finish so maybejust delete the board?
+    // or place a message over the board so board can't be clicked lol
+
+    // reload page
+    location.reload();
+};
